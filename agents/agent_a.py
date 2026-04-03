@@ -1,4 +1,3 @@
-```python
 import requests
 import os
 
@@ -35,4 +34,4 @@ def agent_a(topic):
 
     import json
     return json.loads(text)
-```
+
