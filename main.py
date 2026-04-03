@@ -1,4 +1,3 @@
-```python id="9clm5y"
 from agents.agent_d import run_pipeline
 
 if __name__ == "__main__":
