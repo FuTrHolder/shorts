@@ -34,22 +34,12 @@ jobs:
           sudo sed -i 's/rights="none" pattern="TEXT"/rights="read|write" pattern="TEXT"/' /etc/ImageMagick-6/policy.xml || true
           sudo sed -i 's/rights="none" pattern="@\*"/rights="read|write" pattern="@\*"/' /etc/ImageMagick-6/policy.xml || true
 
-      # 🔥 token.json 복원 (핵심)
+      # 🔥 token.json 복원 (안정 버전)
       - name: Restore token.json
         run: |
-          TOKEN=""
-          i=0
-          while true; do
-            PART=$(printenv YT_TOKEN_$i)
-            if [ -z "$PART" ]; then
-              break
-            fi
-            TOKEN="$TOKEN$PART"
-            i=$((i+1))
-          done
-          echo $TOKEN | base64 --decode > token.json
+          echo "${YT_TOKEN_0}${YT_TOKEN_1}${YT_TOKEN_2}${YT_TOKEN_3}${YT_TOKEN_4}" | base64 --decode > token.json
 
-      # 🔍 디버깅 (문제 생기면 여기 보면 됨)
+      # 🔍 디버깅 (문제 있으면 여기 확인)
       - name: Debug token
         run: |
           echo "파일 목록"
