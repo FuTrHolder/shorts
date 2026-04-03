@@ -1,4 +1,4 @@
 requests
-moviepy
+moviepy==1.0.3
 google-api-python-client
 google-auth
