@@ -37,7 +37,7 @@ jobs:
       # 🔥 token.json 복원 (안정 버전)
       - name: Restore token.json
         run: |
-          echo "${YT_TOKEN_0}${YT_TOKEN_1}${YT_TOKEN_2}${YT_TOKEN_3}${YT_TOKEN_4}" | base64 --decode > token.json
+          echo "${YT_TOKEN_0}${YT_TOKEN_1}${YT_TOKEN_2}${YT_TOKEN_3}" | base64 --decode > token.json
 
       # 🔍 디버깅 (문제 있으면 여기 확인)
       - name: Debug token
