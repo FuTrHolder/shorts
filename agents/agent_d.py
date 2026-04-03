@@ -3,7 +3,6 @@ from agents.agent_b import agent_b
 from agents.agent_c import agent_c
 from agents.agent_e import agent_e
 
-
 def run_pipeline(topic):
     for i in range(3):
         print(f"Attempt {i+1}")
@@ -11,9 +10,11 @@ def run_pipeline(topic):
         script = agent_a(topic)
         score = agent_e(script)
 
+        print("Score:", score)
+
         if score >= 80:
             video = agent_b(script)
-            video_id = agent_c(video, script['hook'])
+            video_id = agent_c(video, script["hook"])
             print("Uploaded:", video_id)
             return
 
