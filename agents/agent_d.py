@@ -1,3 +1,8 @@
+from agents.agent_a import agent_a
+from agents.agent_b import agent_b
+from agents.agent_c import agent_c
+from agents.agent_e import agent_e
+
 def run_pipeline(topic):
     print("PIPELINE START")
 
