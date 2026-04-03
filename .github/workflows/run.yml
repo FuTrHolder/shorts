@@ -1,45 +1,13 @@
-name: Run Shorts Bot
-
-on:
-  schedule:
-    - cron: "0 * * * *"
-  workflow_dispatch:
-
-jobs:
-  run:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Install ImageMagick
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y imagemagick
-
-      # 🔥 핵심: 보안 정책 해제
-      - name: Fix ImageMagick policy
-        run: |
-          sudo sed -i 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/' /etc/ImageMagick-6/policy.xml || true
-          sudo sed -i 's/rights="none" pattern="TEXT"/rights="read|write" pattern="TEXT"/' /etc/ImageMagick-6/policy.xml || true
-          sudo sed -i 's/rights="none" pattern="@\*"/rights="read|write" pattern="@\*"/' /etc/ImageMagick-6/policy.xml || true
-
-      - name: Restore token.json
-        run: |
-          echo "" | base64 --decode > token.json
-
-      - name: Run main
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python main.py
+- name: Restore token.json
+  run: |
+    TOKEN=""
+    i=0
+    while true; do
+      PART=$(printenv YT_TOKEN_$i)
+      if [ -z "$PART" ]; then
+        break
+      fi
+      TOKEN="$TOKEN$PART"
+      i=$((i+1))
+    done
+    echo $TOKEN | base64 --decode > token.json
