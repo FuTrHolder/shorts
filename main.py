@@ -1,18 +1,8 @@
-import os
-import base64
+from agents.agent_d import run_pipeline
 
-parts = []
-i = 0
+print("START")
 
-while True:
-    key = f"YT_TOKEN_{i}"
-    val = os.getenv(key)
-    if not val:
-        break
-    parts.append(val)
-    i += 1
+if __name__ == "__main__":
+    run_pipeline("미국 증시")
 
-token_str = "".join(parts)
-
-with open("token.json", "wb") as f:
-    f.write(base64.b64decode(token_str))
+print("END")
