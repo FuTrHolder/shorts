@@ -56,3 +56,14 @@ jobs:
           YT_TOKEN_3: ${{ secrets.YT_TOKEN_3 }}
           YT_TOKEN_4: ${{ secrets.YT_TOKEN_4 }}
         run: python main.py
+
+        - name: Debug env
+          run: |
+            echo "TOKEN0 length:"
+            echo ${#YT_TOKEN_0}
+            echo "TOKEN1 length:"
+            echo ${#YT_TOKEN_1}
+            echo "TOKEN2 length:"
+            echo ${#YT_TOKEN_2}
+            echo "TOKEN3 length:"
+            echo ${#YT_TOKEN_3}
