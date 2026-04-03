@@ -2,7 +2,7 @@ name: Run Shorts Bot
 
 on:
   schedule:
-    - cron: '0 7 * * *'
+    - cron: "0 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -13,21 +13,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Create token.json
-        run: |
-          echo "${{ secrets.YOUTUBE_TOKEN_JSON }}" | base64 --decode > token.json
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
 
-      - name: Run script
+      - name: Restore token.json
+        run: |
+          echo "" | base64 --decode > token.json
+
+      - name: Run main
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python main.py
