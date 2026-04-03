@@ -1,4 +1,3 @@
-```python
 from moviepy.editor import *
 
 
@@ -17,4 +16,4 @@ def agent_b(script):
     final.write_videofile("output.mp4", fps=30)
 
     return "output.mp4"
-```
+
