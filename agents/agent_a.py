@@ -24,20 +24,22 @@ JSON으로만 출력:
 }}
 """
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={api_key}"
+    url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={api_key}"
 
     res = requests.post(url, json={
-        "contents": [{"parts": [{"text": prompt}]}]
+        "contents": [{
+            "parts": [{"text": prompt}]
+        }]
     }).json()
 
-    text = res["candidates"][0]["content"]["parts"][0]["text"]
+    print("GEMINI RESPONSE:", res)  # 🔥 디버깅용
 
     try:
+        text = res["candidates"][0]["content"]["parts"][0]["text"]
         return json.loads(text)
     except:
-        # JSON 깨질 경우 기본값
         return {
-            "hook": "오늘 미국 증시 급락 상황",
+            "hook": "오늘 미국 증시 급락",
             "points": ["나스닥 하락", "금리 영향", "투자 심리 위축"],
-            "closing": "내일 시장이 중요합니다"
+            "closing": "내일 시장 주목"
         }
