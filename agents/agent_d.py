@@ -1,4 +1,3 @@
-```python
 from agents.agent_a import agent_a
 from agents.agent_b import agent_b
 from agents.agent_c import agent_c
@@ -21,4 +20,3 @@ def run_pipeline(topic):
         topic += " 충격"
 
     print("FAILED")
-```
