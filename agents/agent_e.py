@@ -1,5 +1,3 @@
-```python
-
 def agent_e(script):
     score = 0
 
@@ -13,4 +11,4 @@ def agent_e(script):
         score += 30
 
     return score
-```
+
