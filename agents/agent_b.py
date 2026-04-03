@@ -1,20 +1,34 @@
+import os
+os.environ["IMAGEMAGICK_BINARY"] = "/usr/bin/convert"
+
 from moviepy.editor import TextClip, ColorClip, CompositeVideoClip, concatenate_videoclips
 
-def agent_b(script):
-    lines = [script["hook"]] + script["points"] + [script["closing"]]
+def make_clip(text):
+    txt = TextClip(
+        text,
+        fontsize=70,
+        color="white",
+        size=(720, 1280),
+        method="caption"
+    ).set_duration(2)
 
+    bg = ColorClip(size=(720,1280), color=(0,0,0)).set_duration(2)
+
+    return CompositeVideoClip([bg, txt.set_position("center")])
+
+def agent_b(script):
     clips = []
 
-    for line in lines:
-        txt = TextClip(line, fontsize=70, color="white", size=(720,1280), method="caption")
-        txt = txt.set_duration(3).set_position("center")
+    clips.append(make_clip(script["hook"]))
 
-        bg = ColorClip(size=(720,1280), color=(0,0,0), duration=3)
+    for p in script["points"]:
+        clips.append(make_clip(p))
 
-        clip = CompositeVideoClip([bg, txt])
-        clips.append(clip)
+    clips.append(make_clip(script["closing"]))
 
     final = concatenate_videoclips(clips)
-    final.write_videofile("output.mp4", fps=30)
 
-    return "output.mp4"
+    output_path = "shorts.mp4"
+    final.write_videofile(output_path, fps=24)
+
+    return output_path
