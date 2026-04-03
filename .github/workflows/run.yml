@@ -1,13 +1,68 @@
-- name: Restore token.json
-  run: |
-    TOKEN=""
-    i=0
-    while true; do
-      PART=$(printenv YT_TOKEN_$i)
-      if [ -z "$PART" ]; then
-        break
-      fi
-      TOKEN="$TOKEN$PART"
-      i=$((i+1))
-    done
-    echo $TOKEN | base64 --decode > token.json
+name: Run Shorts Bot
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install ImageMagick
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
+
+      - name: Fix ImageMagick policy
+        run: |
+          sudo sed -i 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/' /etc/ImageMagick-6/policy.xml || true
+          sudo sed -i 's/rights="none" pattern="TEXT"/rights="read|write" pattern="TEXT"/' /etc/ImageMagick-6/policy.xml || true
+          sudo sed -i 's/rights="none" pattern="@\*"/rights="read|write" pattern="@\*"/' /etc/ImageMagick-6/policy.xml || true
+
+      # 🔥 token.json 복원 (핵심)
+      - name: Restore token.json
+        run: |
+          TOKEN=""
+          i=0
+          while true; do
+            PART=$(printenv YT_TOKEN_$i)
+            if [ -z "$PART" ]; then
+              break
+            fi
+            TOKEN="$TOKEN$PART"
+            i=$((i+1))
+          done
+          echo $TOKEN | base64 --decode > token.json
+
+      # 🔍 디버깅 (문제 생기면 여기 보면 됨)
+      - name: Debug token
+        run: |
+          echo "파일 목록"
+          ls -al
+          echo "token.json 크기"
+          wc -c token.json || echo "없음"
+
+      - name: Run main
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          YT_TOKEN_0: ${{ secrets.YT_TOKEN_0 }}
+          YT_TOKEN_1: ${{ secrets.YT_TOKEN_1 }}
+          YT_TOKEN_2: ${{ secrets.YT_TOKEN_2 }}
+          YT_TOKEN_3: ${{ secrets.YT_TOKEN_3 }}
+          YT_TOKEN_4: ${{ secrets.YT_TOKEN_4 }}
+        run: python main.py
